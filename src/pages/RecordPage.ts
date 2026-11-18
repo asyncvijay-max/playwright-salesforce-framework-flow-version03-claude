@@ -3,6 +3,7 @@ import { Modal } from "../components/Modal";
 import { Toast } from "../components/Toast";
 import { DetailField } from "../components/DetailField";
 import { formatDate } from "../data/dates";
+import { ActionMenu } from "../components/ActionMenu";
 
 /**
  * What EVERY Salesforce record page shares: Contacts, Accounts, Opportunities...
@@ -21,6 +22,13 @@ export class RecordPage {
   async openNew(): Promise<Modal> {
     await this.page.goto(`/lightning/o/${this.objectApiName}/new`);
     const popup = new Modal(this.page, `New ${this.objectLabel}`);
+    await popup.expectOpen();
+    return popup;
+  }
+
+  async openEdit(recordName: string): Promise<Modal> {
+    await new ActionMenu(this.page).run("Edit");
+    const popup = new Modal(this.page, `Edit ${recordName}`);
     await popup.expectOpen();
     return popup;
   }

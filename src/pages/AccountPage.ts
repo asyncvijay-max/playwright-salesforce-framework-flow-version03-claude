@@ -32,4 +32,19 @@ export class AccountPage extends RecordPage {
     await popup.save();
     await this.toast.expectMessage(account.name); // straight after Save, before it fades
   }
+
+  /** Edits the open account. Only the fields given in `changes` are touched. */
+  async update(currentName: string, changes: Partial<AccountData>) {
+    const popup = await this.openEdit(currentName);
+
+    if (changes.name) await popup.textField("Account Name").fill(changes.name);
+    if (changes.phone) await popup.textField("Phone").fill(changes.phone);
+    if (changes.website) await popup.textField("Website").fill(changes.website);
+    if (changes.type) await popup.picklist("Type").select(changes.type);
+    if (changes.industry)
+      await popup.picklist("Industry").select(changes.industry);
+
+    await popup.save();
+    await this.toast.expectMessage(changes.name ?? currentName); // the NEW name if it was renamed
+  }
 }
