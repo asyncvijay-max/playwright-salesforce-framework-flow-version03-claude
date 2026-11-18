@@ -45,6 +45,12 @@ export default defineConfig({
       },
       dependencies: ["setup"],
     },
+    /* REST API tests: no browser, no UI login (token comes from the sf CLI) */
+    {
+      name: "api",
+      testDir: "./api/tests",
+      timeout: 30_000,
+    },
     /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',

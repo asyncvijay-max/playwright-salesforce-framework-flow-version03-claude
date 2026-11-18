@@ -1,9 +1,9 @@
 import { test as setup } from "@playwright/test";
 import { execSync } from "child_process";
 import fs from "fs";
+import { SF_ORG_ALIAS } from "../src/config/org";
 
 const authFile = "playwright/.auth/user.json";
-const SF_ORG_ALIAS = "mydev";
 
 setup("login to Salesforce", async ({ browser, baseURL }) => {
   setup.setTimeout(120_000); // Salesforce can be slow to load
