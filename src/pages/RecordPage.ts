@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 import { Modal } from "../components/Modal";
 import { Toast } from "../components/Toast";
 import { DetailField } from "../components/DetailField";
@@ -35,5 +35,40 @@ export class RecordPage {
 
   async expectDetailDate(label: string, date: Date) {
     await this.expectDetail(label, formatDate(date));
+  }
+
+  async openRelatedTab() {
+    await this.page.getByRole("tab", { name: "Related", exact: true }).click();
+  }
+
+  /**
+   * A related list card on the Related tab: "Contacts (1)", "Opportunities (2)"...
+   * Matched by the start of its heading, so the record count doesn't matter.
+   * Hidden copies of earlier record pages stay in the DOM, so only visible cards count.
+   */
+  relatedList(listName: string): Locator {
+    return this.page
+      .locator("article")
+      .filter({ visible: true })
+      .filter({
+        has: this.page.getByRole("heading", {
+          name: new RegExp(`^${listName}\\b`),
+        }),
+      });
+  }
+
+  /** The link to a record in a related list. The name only needs to be contained (e.g. a last name). */
+  relatedRecord(listName: string, recordName: string): Locator {
+    return this.relatedList(listName).getByRole("link", { name: recordName });
+  }
+
+  async expectRelatedRecord(listName: string, recordName: string) {
+    await this.openRelatedTab();
+    await expect(this.relatedRecord(listName, recordName)).toBeVisible();
+  }
+
+  async openRelatedRecord(listName: string, recordName: string) {
+    await this.openRelatedTab();
+    await this.relatedRecord(listName, recordName).click();
   }
 }

@@ -4,6 +4,9 @@ import { Locator, expect } from "@playwright/test";
  * A Salesforce number input: Amount, Probability, Quantity...
  * Currency, number and percent fields render as role "spinbutton", not "textbox".
  * Found by its label, always inside a scope (usually the popup).
+ * It works like TextField but finds the field as a number input, 
+ * so you can reuse it for number, currency and percent fields such as Probability or Quantity.
+
  */
 export class NumberField {
   readonly input: Locator;

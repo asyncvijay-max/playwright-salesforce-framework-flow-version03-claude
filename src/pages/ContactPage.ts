@@ -1,5 +1,6 @@
 import { Page } from "@playwright/test";
 import { RecordPage } from "./RecordPage";
+import { DetailField } from "../components/DetailField";
 
 /** The data a test can give when creating a contact. Only lastName is required. */
 export type ContactData = {
@@ -38,5 +39,13 @@ export class ContactPage extends RecordPage {
 
     await popup.save();
     await this.toast.expectMessage(ContactPage.fullName(contact)); // straight after Save, before it fades
+  }
+
+  /** On the Details tab: follows the Account Name link to the contact's account. */
+  async openAccount(accountName: string) {
+    await this.openDetailsTab();
+    await new DetailField(this.page, "Account Name").root
+      .getByRole("link", { name: accountName, exact: true })
+      .click();
   }
 }
