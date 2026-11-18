@@ -1,5 +1,6 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { TextField } from "./TextField";
+import { NumberField } from "./NumberField";
 import { Picklist } from "./Picklist";
 import { DateField } from "./DateField";
 import { Lookup } from "./Lookup";
@@ -30,6 +31,10 @@ export class Modal {
 
   textField(label: string): TextField {
     return new TextField(this.root, label);
+  }
+
+  numberField(label: string): NumberField {
+    return new NumberField(this.root, label);
   }
 
   picklist(label: string): Picklist {
